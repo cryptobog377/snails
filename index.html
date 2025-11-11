@@ -17,6 +17,7 @@
       color: #f8e08c;
       text-align: center;
       overflow: hidden;
+      transition: background-color 2s ease;
     }
 
     body::after {
@@ -29,7 +30,7 @@
 
     .content {
       position: relative;
-      z-index: 1;
+      z-index: 2;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -58,11 +59,33 @@
       box-shadow: 0 4px 15px rgba(0,0,0,0.4);
       transition: all 0.3s ease;
       text-transform: uppercase;
+      z-index: 2;
     }
 
     .btn:hover {
       transform: scale(1.05);
       box-shadow: 0 0 25px rgba(255,215,0,0.5);
+    }
+
+    .snail {
+      position: absolute;
+      font-size: 2rem;
+      pointer-events: none;
+      z-index: 1;
+      filter: drop-shadow(0 0 5px rgba(255,255,255,0.3));
+    }
+
+    .bubble {
+      position: absolute;
+      bottom: 0;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.3);
+      animation: rise 10s linear infinite;
+    }
+
+    @keyframes rise {
+      from { transform: translateY(0) scale(1); opacity: 1; }
+      to { transform: translateY(-120vh) scale(1.5); opacity: 0; }
     }
   </style>
 </head>
@@ -71,5 +94,48 @@
     <div class="ca-box">CA: will be added soon</div>
     <a href="https://x.com/i/communities/1988036400181100606" target="_blank" class="btn">Join X Community</a>
   </div>
+
+  <script>
+    // 🐌 Улитки двигаются по экрану
+    const snailCount = 10;
+    for (let i = 0; i < snailCount; i++) {
+      const snail = document.createElement('div');
+      snail.classList.add('snail');
+      snail.textContent = '🐌';
+      snail.style.left = Math.random() * 100 + 'vw';
+      snail.style.top = Math.random() * 100 + 'vh';
+      snail.style.fontSize = (Math.random() * 2 + 1.5) + 'rem';
+      document.body.appendChild(snail);
+
+      let direction = Math.random() > 0.5 ? 1 : -1;
+      setInterval(() => {
+        let currentLeft = parseFloat(snail.style.left);
+        currentLeft += direction * 0.2;
+        if (currentLeft > 100 || currentLeft < -5) direction *= -1;
+        snail.style.left = currentLeft + 'vw';
+      }, 100);
+    }
+
+    // 🌈 Мягкое мигание оттенков
+    const colors = ['#f8e08c', '#ffd6a5', '#fff3b0', '#ffe4a1'];
+    let i = 0;
+    setInterval(() => {
+      document.body.style.backgroundColor = colors[i % colors.length];
+      i++;
+    }, 5000);
+
+    // 🫧 Пузыри
+    setInterval(() => {
+      const bubble = document.createElement('div');
+      bubble.classList.add('bubble');
+      const size = Math.random() * 20 + 10;
+      bubble.style.width = size + 'px';
+      bubble.style.height = size + 'px';
+      bubble.style.left = Math.random() * 100 + 'vw';
+      bubble.style.animationDuration = (6 + Math.random() * 6) + 's';
+      document.body.appendChild(bubble);
+      setTimeout(() => bubble.remove(), 12000);
+    }, 1000);
+  </script>
 </body>
 </html>
